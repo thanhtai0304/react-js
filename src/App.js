@@ -1,12 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useDebounce } from "use-debounce";
 import "./App.css";
 import Header from "./conponents/Header";
 import * as BooksAPI from "./BooksAPI";
 import Shelves from "./conponents/Shelves";
 import Book from "./conponents/Book";
-import { useDebounce } from "use-debounce";
+import PageNotFound from "./conponents/404page";
 
 function App() {
   const [books, setBooks] = useState([]);
@@ -31,8 +32,8 @@ function App() {
     if (querryDebounce) {
       BooksAPI.search(querryDebounce, 10)
         .then(data => {
-          console.log("data", data);
           if (data.error) {
+            alert("Book Not Found")
             setSearchBooks([])
           } else {
             setSearchBooks(data)
@@ -131,6 +132,10 @@ function App() {
               </div>
             </div>
           }
+        />
+        <Route
+          path="*"
+          element={<PageNotFound />}
         />
       </Routes>
     </div>
