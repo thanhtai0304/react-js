@@ -6,6 +6,7 @@ import Header from "./conponents/Header";
 import * as BooksAPI from "./BooksAPI";
 import Shelves from "./conponents/Shelves";
 import Book from "./conponents/Book";
+import { useDebounce } from "use-debounce";
 
 function App() {
   const [books, setBooks] = useState([]);
@@ -14,6 +15,7 @@ function App() {
   const [mapOfIdToBook, setMapOfBookIds] = useState([])
 
   const [querry, setQuerry] = useState("")
+  const [querryDebounce] = useDebounce(querry, 500)
 
   // Get all data and setBooks
   useEffect(() => {
@@ -26,9 +28,10 @@ function App() {
 
   // Search book
   useEffect(() => {
-    if (querry) {
-      BooksAPI.search(querry, 10)
+    if (querryDebounce) {
+      BooksAPI.search(querryDebounce, 10)
         .then(data => {
+          console.log("data", data);
           if (data.error) {
             setSearchBooks([])
           } else {
@@ -40,7 +43,7 @@ function App() {
     return () => {
       setSearchBooks([])
     }
-  }, [querry])
+  }, [querryDebounce])
 
   // Update book shelf
   const updateBookShelf = (book, shelfValue) => {

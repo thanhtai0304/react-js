@@ -1,6 +1,29 @@
 import React from "react";
 
-const Book = ({ book, updateBookShelf }) => {
+const shelves = [
+    {
+        id: "1",
+        shelfName: "currentlyReading",
+        shelfDisplayName: "Currently Reading"
+    },
+    {
+        id: "2",
+        shelfName: "wantToRead",
+        shelfDisplayName: "Want to Read"
+    },
+    {
+        id: "3",
+        shelfName: "read",
+        shelfDisplayName: "Read"
+    },
+    {
+        id: "4",
+        shelfName: "none",
+        shelfDisplayName: "None"
+    },
+]
+const Book = (props) => {
+    const { book, updateBookShelf } = props
 
     return (
         <div className="book">
@@ -11,7 +34,7 @@ const Book = ({ book, updateBookShelf }) => {
                         width: 128,
                         height: 193,
                         backgroundImage:
-                            `url("${book.imageLinks.thumbnail}")`,
+                            `url("${book?.imageLinks?.thumbnail}")`,
                     }}
                 ></div>
                 <div className="book-shelf-changer">
@@ -19,15 +42,10 @@ const Book = ({ book, updateBookShelf }) => {
                         defaultValue={(book.shelf) ? (book.shelf) : "none"}
                         onChange={(e) => updateBookShelf(book, e.target.value)}
                     >
-                        <option value="move" disabled>
-                            Move to...
-                        </option>
-                        <option value="currentlyReading">
-                            Currently Reading
-                        </option>
-                        <option value="wantToRead">Want to Read</option>
-                        <option value="read">Read</option>
-                        <option value="none">None</option>
+                        <option key="0" value="move" disabled>Move to...</option>
+                        {shelves.map(shelf => (
+                            <option key={shelf.id} value={shelf.shelfName} >{shelf.shelfDisplayName}</option>
+                        ))}
                     </select>
                 </div>
             </div>
